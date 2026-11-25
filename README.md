@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # ShopFlow Minimal MVP
 
 ShopFlow is a simple e-commerce mini-project built for a fast local demo with:
@@ -36,6 +35,10 @@ shopflow-minimal-mvp/
 │   ├── components/
 │   ├── lib/
 │   └── package.json
+├── screenshots/
+│   ├── home.png
+│   ├── product-details.png
+│   └── cart.png
 ├── shopflow.postman_collection.json
 └── README.md
 ```
@@ -55,12 +58,26 @@ shopflow-minimal-mvp/
 - My orders list, details, and pending-order cancellation
 - Swagger UI and Postman collection
 
+## Screenshots
+
+### Home Page
+
+![ShopFlow Home Page](./screenshots/main.png)
+
+### Product Details
+
+![ShopFlow Product Details](./screenshots/details.png)
+
+### Shopping Cart
+
+![ShopFlow Shopping Login](./screenshots/login.png)
+
 ## Demo Accounts
 
-- Admin
+- **Admin**
   - Email: `admin@shopflow.com`
   - Password: `Admin123!`
-- Customer
+- **Customer**
   - Email: `client@shopflow.com`
   - Password: `Client123!`
 
@@ -123,7 +140,7 @@ Frontend URL:
 
 Optional environment variable:
 
-```bash
+```env
 NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
 ```
 
@@ -139,12 +156,12 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
 
 ## Main API Endpoints
 
-Auth:
+**Auth:**
 
 - `POST /api/auth/register`
 - `POST /api/auth/login`
 
-Products:
+**Products:**
 
 - `GET /api/products?page=0&size=8`
 - `GET /api/products/{id}`
@@ -152,19 +169,19 @@ Products:
 - `PUT /api/products/{id}`
 - `DELETE /api/products/{id}`
 
-Categories:
+**Categories:**
 
 - `GET /api/categories`
 - `POST /api/categories`
 
-Cart:
+**Cart:**
 
 - `GET /api/cart`
 - `POST /api/cart/items`
 - `PUT /api/cart/items/{itemId}`
 - `DELETE /api/cart/items/{itemId}`
 
-Orders:
+**Orders:**
 
 - `POST /api/orders`
 - `GET /api/orders/my`
@@ -177,13 +194,11 @@ Orders:
 - Registered users are stored with encoded passwords.
 - Product deletion is soft delete only: `active = false`.
 - Shipping is fixed at `5.00` when the cart is not empty.
+- This project is intended for educational and local demonstration use, not production deployment.
 
-## Deliverables
+## Project Files
 
-- Backend source in [backend](C:\Users\Adam\Desktop\javaEEProject\backend)
-- Frontend source in [frontend](C:\Users\Adam\Desktop\javaEEProject\frontend)
-- Seed data in [data.sql](C:\Users\Adam\Desktop\javaEEProject\backend\src\main\resources\data.sql)
-- Postman collection in [shopflow.postman_collection.json](C:\Users\Adam\Desktop\javaEEProject\shopflow.postman_collection.json)
-=======
-# shopflow
->>>>>>> f803598adfb9d960cc20eb8162354dd00285b516
+- [Backend source](./backend/)
+- [Frontend source](./frontend/)
+- [Seed data](./backend/src/main/resources/data.sql)
+- [Postman collection](./shopflow.postman_collection.json)
