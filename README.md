@@ -62,15 +62,15 @@ shopflow-minimal-mvp/
 
 ### Home Page
 
-![ShopFlow Home Page](./screenshots/main.png)
+![ShopFlow Home Page](./main.png)
 
 ### Product Details
 
-![ShopFlow Product Details](./screenshots/details.png)
+![ShopFlow Product Details](./details.png)
 
 ### Shopping Cart
 
-![ShopFlow Shopping Login](./screenshots/login.png)
+![ShopFlow Shopping Login](./login.png)
 
 ## Demo Accounts
 
