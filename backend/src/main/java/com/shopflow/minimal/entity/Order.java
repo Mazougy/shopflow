@@ -55,7 +55,7 @@ public class Order {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal shippingFee;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(name = "total_ttc", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalTTC;
 
     @Column(nullable = false)

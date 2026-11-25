@@ -24,7 +24,11 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
 
+    @Transactional(readOnly = true)
     public ProductPageResponse getAll(int page, int size, String search) {
+        if (page < 0 || size < 1 || size > 100) {
+            throw new BadRequestException("Invalid pagination parameters");
+        }
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<Product> productPage = (search != null && !search.isBlank())
                 ? productRepository.findByActiveTrueAndNameContainingIgnoreCase(search.trim(), pageable)
@@ -41,6 +45,7 @@ public class ProductService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
     public ProductResponse getById(Long id) {
         return ProductMapper.toResponse(getActiveEntity(id));
     }
@@ -86,6 +91,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
+    @Transactional(readOnly = true)
     public Product getActiveEntity(Long id) {
         return productRepository.findByIdAndActiveTrue(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));

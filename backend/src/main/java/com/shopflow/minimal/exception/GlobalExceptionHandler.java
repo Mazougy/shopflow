@@ -1,13 +1,18 @@
 package com.shopflow.minimal.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -35,9 +40,25 @@ public class GlobalExceptionHandler {
         return buildError(HttpStatus.BAD_REQUEST, "Validation failed", request, errors);
     }
 
+    @ExceptionHandler({HttpMessageNotReadableException.class, MethodArgumentTypeMismatchException.class})
+    public ResponseEntity<ApiError> handleMalformedRequest(Exception ex, HttpServletRequest request) {
+        return buildError(HttpStatus.BAD_REQUEST, "Malformed request payload or parameter", request, null);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiError> handleAuthentication(AuthenticationException ex, HttpServletRequest request) {
+        String message = ex instanceof DisabledException ? "Account is disabled" : "Invalid email or password";
+        return buildError(HttpStatus.UNAUTHORIZED, message, request, null);
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiError> handleAccessDenied(AccessDeniedException ex, HttpServletRequest request) {
         return buildError(HttpStatus.FORBIDDEN, "You do not have permission to access this resource", request, null);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiError> handleDataIntegrity(DataIntegrityViolationException ex, HttpServletRequest request) {
+        return buildError(HttpStatus.CONFLICT, "Operation conflicts with existing data", request, null);
     }
 
     @ExceptionHandler(Exception.class)

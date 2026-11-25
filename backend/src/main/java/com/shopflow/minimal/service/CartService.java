@@ -31,6 +31,7 @@ public class CartService {
     private final ProductService productService;
     private final UserService userService;
 
+    @Transactional
     public CartResponse getCurrentCart(String email) {
         Cart cart = getOrCreateCart(email);
         return toResponse(cart);
@@ -67,6 +68,7 @@ public class CartService {
             cart.getItems().add(item);
         }
 
+        cart.updateTimestamp();
         return toResponse(cartRepository.save(cart));
     }
 
@@ -76,14 +78,20 @@ public class CartService {
         CartItem item = cartItemRepository.findByIdAndCartUserId(itemId, user.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Cart item not found"));
 
-        if (item.getProduct().getStock() < request.getQuantity()) {
+        Product product = item.getProduct();
+        if (!Boolean.TRUE.equals(product.getActive())) {
+            throw new BadRequestException("Product is no longer available");
+        }
+        if (product.getStock() < request.getQuantity()) {
             throw new BadRequestException("Requested quantity exceeds current stock");
         }
 
         item.setQuantity(request.getQuantity());
-        item.setUnitPrice(ProductMapper.resolveCurrentPrice(item.getProduct()));
+        item.setUnitPrice(ProductMapper.resolveCurrentPrice(product));
         cartItemRepository.save(item);
-        return toResponse(cartRepository.save(item.getCart()));
+        Cart cart = item.getCart();
+        cart.updateTimestamp();
+        return toResponse(cartRepository.save(cart));
     }
 
     @Transactional
@@ -94,15 +102,18 @@ public class CartService {
 
         Cart cart = item.getCart();
         cart.getItems().remove(item);
+        cart.updateTimestamp();
         return toResponse(cartRepository.save(cart));
     }
 
     @Transactional
     public void clearCart(Cart cart) {
         cart.getItems().clear();
+        cart.updateTimestamp();
         cartRepository.save(cart);
     }
 
+    @Transactional
     public Cart getOrCreateCart(String email) {
         User user = userService.getByEmail(email);
         return cartRepository.findByUserId(user.getId())

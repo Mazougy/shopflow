@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ShopFlow Minimal MVP
 
 ShopFlow is a simple e-commerce mini-project built for a fast local demo with:
@@ -183,3 +184,6 @@ Orders:
 - Frontend source in [frontend](C:\Users\Adam\Desktop\javaEEProject\frontend)
 - Seed data in [data.sql](C:\Users\Adam\Desktop\javaEEProject\backend\src\main\resources\data.sql)
 - Postman collection in [shopflow.postman_collection.json](C:\Users\Adam\Desktop\javaEEProject\shopflow.postman_collection.json)
+=======
+# shopflow
+>>>>>>> f803598adfb9d960cc20eb8162354dd00285b516

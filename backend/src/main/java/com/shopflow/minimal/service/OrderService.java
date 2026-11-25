@@ -12,6 +12,7 @@ import com.shopflow.minimal.entity.User;
 import com.shopflow.minimal.exception.BadRequestException;
 import com.shopflow.minimal.exception.ResourceNotFoundException;
 import com.shopflow.minimal.mapper.OrderMapper;
+import com.shopflow.minimal.mapper.ProductMapper;
 import com.shopflow.minimal.repository.OrderRepository;
 import com.shopflow.minimal.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import java.math.BigDecimal;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -56,13 +58,14 @@ public class OrderService {
             product.setStock(product.getStock() - cartItem.getQuantity());
             productRepository.save(product);
 
-            BigDecimal lineTotal = cartItem.getUnitPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity()));
+            BigDecimal unitPrice = ProductMapper.resolveCurrentPrice(product);
+            BigDecimal lineTotal = unitPrice.multiply(BigDecimal.valueOf(cartItem.getQuantity()));
             subTotal = subTotal.add(lineTotal);
 
             OrderItem orderItem = OrderItem.builder()
                     .product(product)
                     .quantity(cartItem.getQuantity())
-                    .unitPrice(cartItem.getUnitPrice())
+                    .unitPrice(unitPrice)
                     .build();
             orderItems.add(orderItem);
         }
@@ -72,7 +75,7 @@ public class OrderService {
 
         Order order = Order.builder()
                 .user(user)
-                .orderNumber("TEMP-" + System.currentTimeMillis())
+                .orderNumber("TEMP-" + UUID.randomUUID())
                 .status(OrderStatus.PENDING)
                 .subTotal(subTotal)
                 .shippingFee(shippingFee)
@@ -92,6 +95,7 @@ public class OrderService {
         return OrderMapper.toResponse(order);
     }
 
+    @Transactional(readOnly = true)
     public List<OrderResponse> getMyOrders(String email) {
         User user = userService.getByEmail(email);
         return orderRepository.findByUserIdOrderByCreatedAtDesc(user.getId()).stream()
@@ -99,6 +103,7 @@ public class OrderService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public OrderResponse getOrderById(String email, Long orderId) {
         return OrderMapper.toResponse(getOrderEntity(email, orderId));
     }
