@@ -13,32 +13,38 @@ The goal is a clean MVP that is easy to run and explain in class.
 ## Project Structure
 
 ```text
-shopflow-minimal-mvp/
+Java/
 ├── backend/
 │   ├── pom.xml
-│   └── src/main/
+│   ├── src/main/
+│   │   ├── java/com/shopflow/minimal/
+│   │   │   ├── config/
+│   │   │   ├── controller/
+│   │   │   ├── dto/
+│   │   │   ├── entity/
+│   │   │   ├── exception/
+│   │   │   ├── mapper/
+│   │   │   ├── repository/
+│   │   │   ├── security/
+│   │   │   └── service/
+│   │   └── resources/
+│   │       ├── application.yml
+│   │       ├── data.sql
+│   │       └── schema.sql
+│   └── src/test/
 │       ├── java/com/shopflow/minimal/
-│       │   ├── config/
-│       │   ├── controller/
-│       │   ├── dto/
-│       │   ├── entity/
-│       │   ├── exception/
-│       │   ├── mapper/
-│       │   ├── repository/
-│       │   ├── security/
-│       │   └── service/
+│       │   └── ShopflowBackendIntegrationTest.java
 │       └── resources/
-│           ├── application.yml
-│           └── data.sql
+│           └── application-test.yml
 ├── frontend/
 │   ├── app/
 │   ├── components/
 │   ├── lib/
+│   ├── public/
 │   └── package.json
-├── screenshots/
-│   ├── home.png
-│   ├── product-details.png
-│   └── cart.png
+├── main.png
+├── details.png
+├── login.png
 ├── shopflow.postman_collection.json
 └── README.md
 ```
@@ -68,9 +74,9 @@ shopflow-minimal-mvp/
 
 ![ShopFlow Product Details](./details.png)
 
-### Shopping Cart
+### Login Page
 
-![ShopFlow Shopping Login](./login.png)
+![ShopFlow Login Page](./login.png)
 
 ## Demo Accounts
 
@@ -95,6 +101,17 @@ cd backend
 mvn spring-boot:run
 ```
 
+Run tests:
+
+```bash
+cd backend
+mvn clean test
+```
+
+Run from Eclipse:
+
+- Right-click `ShopflowMinimalMvpApplication.java` -> **Run As** -> **Java Application**.
+
 Quick demo option with the already-built jar:
 
 ```bash
@@ -114,11 +131,15 @@ Backend URLs:
 - Swagger UI: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 - H2 Console: [http://localhost:8080/h2-console](http://localhost:8080/h2-console)
 
-H2 settings:
+H2 settings (default in-memory database):
 
 - JDBC URL: `jdbc:h2:mem:shopflowdb`
 - User: `sa`
 - Password: empty
+
+Optional MySQL configuration (via environment variables):
+
+- `DB_URL`, `DB_DRIVER`, `DB_USERNAME`, `DB_PASSWORD`, `DB_DIALECT`
 
 ## Run Frontend
 
@@ -200,5 +221,6 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
 
 - [Backend source](./backend/)
 - [Frontend source](./frontend/)
+- [Database schema](./backend/src/main/resources/schema.sql)
 - [Seed data](./backend/src/main/resources/data.sql)
 - [Postman collection](./shopflow.postman_collection.json)
